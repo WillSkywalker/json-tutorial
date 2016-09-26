@@ -16,7 +16,6 @@ static void lept_parse_whitespace(lept_context* c) {
     c->json = p;
 }
 
-<<<<<<< HEAD
 static int lept_parse_literal(lept_context* c, lept_value* v, 
 		char* literal, lept_type type) {
     EXPECT(c, *literal);
@@ -27,15 +26,6 @@ static int lept_parse_literal(lept_context* c, lept_value* v,
     c->json += i;
     v->type = type;
     return 0;
-=======
-static int lept_parse_null(lept_context* c, lept_value* v) {
-    EXPECT(c, 'n');
-    if (c->json[0] != 'u' || c->json[1] != 'l' || c->json[2] != 'l')
-        return LEPT_PARSE_INVALID_VALUE;
-    c->json += 3;
-    v->type = LEPT_NULL;
-    return LEPT_PARSE_OK;
->>>>>>> miloyip/master
 }
 
 static int lept_parse_value(lept_context* c, lept_value* v) {
