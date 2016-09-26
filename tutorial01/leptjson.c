@@ -1,6 +1,7 @@
 #include "leptjson.h"
 #include <assert.h>  /* assert() */
 #include <stdlib.h>  /* NULL */
+#include <string.h>  /* strlen() */
 
 #define EXPECT(c, ch)       do { assert(*c->json == (ch)); c->json++; } while(0)
 
@@ -24,9 +25,21 @@ static int lept_parse_null(lept_context* c, lept_value* v) {
     return 0;
 }
 
+static int lept_parse_literal(lept_context* c, lept_value* v, 
+		char* literal, lept_type type) {
+    EXPECT(c, *literal);
+    for (int i=0; i < strlen(literal); i++) {
+        if (c->json[i] != literal[i+1])
+            return LEPT_PARSE_INVALID_VALUE;
+    } 
+    c->json += i;
+    v->type = type;
+    return 0;
+}
+
 static int lept_parse_value(lept_context* c, lept_value* v) {
     switch (*c->json) {
-        case 'n':  return lept_parse_null(c, v);
+        case 'n':  return lept_parse_literal(c, v, "null", LEPT_NULL);
         case '\0': return LEPT_PARSE_EXPECT_VALUE;
         default:   return LEPT_PARSE_INVALID_VALUE;
     }
