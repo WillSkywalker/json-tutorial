@@ -32,8 +32,18 @@ static int lept_parse_literal(lept_context* c, lept_value* v,
 }
 
 static int lept_parse_number(lept_context* c, lept_value* v){
-    char *end;
-
+    const char* p = c->json;
+    char* end;
+    if (*p == '-') p++;
+    if (*p == '0') p++;
+    else if (ISDIGIT(*p)) {
+        while (ISDIGIT(*p)) p++;
+    }
+    else return LEPT_PARSE_INVALID_VALUE;
+    if (*p == '.') {
+        p++;
+        
+    }
     v->n = strtod(c->json, &end);
     if (c->json == end)
         return LEPT_PARSE_INVALID_VALUE;
